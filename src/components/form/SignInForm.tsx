@@ -21,7 +21,7 @@ const FormSchema = z.object({
   password: z
     .string()
     .min(1, 'Password is required')
-    .min(8, 'Password must have than 8 characters'),
+    .min(8, 'Password must have more than 8 characters'),
 });
 
 const SignInForm = () => {
@@ -50,7 +50,7 @@ const SignInForm = () => {
                 <FormControl>
                   <Input placeholder='mail@example.com' {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className='text-red-500' />
               </FormItem>
             )}
           />
@@ -67,7 +67,7 @@ const SignInForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className='text-red-500' />
               </FormItem>
             )}
           />
