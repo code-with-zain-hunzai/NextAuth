@@ -41,12 +41,13 @@ const SignInForm = () => {
       const signInData = await signIn('credentials', {
         email: values.email,
         password: values.password,
-        redirect: false, // Add redirect false to avoid auto-redirect
+        redirect: false, 
       });
 
       if (signInData?.error) {
         console.log(signInData.error);
       } else {
+        router.refresh();
         router.push('./admin');
       }
     } catch (error) {
