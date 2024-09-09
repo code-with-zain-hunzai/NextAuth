@@ -3,7 +3,8 @@ import { buttonVariants } from './ui/button';
 import { HandMetal } from 'lucide-react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import UserAccountnav from './userAccountNav';
+import UserAccountnav from './UserAccountnav';
+
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions)
