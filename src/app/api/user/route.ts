@@ -13,44 +13,46 @@ const userSchema = z
       .min(8, 'Password must have more than 8 characters'),
   })
 
-export async function POST(req: Request) {
+  export async function POST(req: Request) {
     try {
-        const body = await req.json();
-        const { email, username, password } = userSchema.parse(body);
-
-        // check if email already exists
-        const existingUserByEmail = await prismadb.user.findUnique({
-            where: { email: email }
-        });
-        if (existingUserByEmail) {
-            return NextResponse.json({ user: null, message: "User with this email already exists" }, { status: 409 });
-        }
-
-        // check if username already exists
-        const existingUserByUsername = await prismadb.user.findUnique({
-            where: { username: username }
-        });
-        if (existingUserByUsername) {
-            return NextResponse.json({ user: null, message: "User with this username already exists" }, { status: 409 });
-        }
-
-        // hash the password
-        const hashedPassword = await hash(password, 10);
-
-        // create the new user
-        const newUser = await prismadb.user.create({
-            data: {
-                username,
-                email,
-                password: hashedPassword,
-            },
-        });
-
-        const { password: newUserPassword, ...rest } = newUser;
-
-        return NextResponse.json({ user: rest, message: "User created successfully" }, { status: 201 });
+      const body = await req.json();
+      console.log('Request body:', body); 
+      const { email, username, password } = userSchema.parse(body);
+  
+      // Check if email already exists
+      const existingUserByEmail = await prismadb.user.findUnique({
+        where: { email },
+      });
+      if (existingUserByEmail) {
+        return NextResponse.json({ user: null, message: "User with this email already exists" }, { status: 409 });
+      }
+  
+      // Check if username already exists
+      const existingUserByUsername = await prismadb.user.findUnique({
+        where: { username },
+      });
+      if (existingUserByUsername) {
+        return NextResponse.json({ user: null, message: "User with this username already exists" }, { status: 409 });
+      }
+  
+      // Hash the password
+      const hashedPassword = await hash(password, 10);
+  
+      // Create the new user
+      const newUser = await prismadb.user.create({
+        data: {
+          username,
+          email,
+          password: hashedPassword,
+        },
+      });
+  
+      const { password: newUserPassword, ...rest } = newUser;
+  
+      return NextResponse.json({ user: rest, message: "User created successfully" }, { status: 201 });
     } catch (error) {
-        console.error("Error creating user:", error);
-        return NextResponse.json({ message: "Something went wrong!" }, { status: 500 });
+      console.error("Error creating user:", error);
+      return NextResponse.json({ message: "Something went wrong!" }, { status: 500 });
     }
-}
+  }
+  

@@ -52,7 +52,7 @@ const SignInForm = () => {
         toast({
           title: "Error",
           description: "Oops! something  wents wrong!",
-          variant:"destructive"
+          variant: "destructive"
         })
       } else {
         router.refresh();
@@ -110,6 +110,11 @@ const SignInForm = () => {
         If you don&apos;t have an account, please&nbsp;
         <Link className="text-blue-500 hover:underline" href="/sign-up">
           Sign up
+        </Link>
+      </p>
+      <p className=' pt-2 text-sm'>
+        <Link href="/forgot-password" className="text-blue-500 hover:underline">
+          Forgot Password?
         </Link>
       </p>
     </Form>

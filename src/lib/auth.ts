@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { prismadb } from "./prismadb";
 import bcrypt from "bcrypt";
 
@@ -14,6 +15,10 @@ export const authOptions: NextAuthOptions = {
         signIn: "/sign-in",
     },
     providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+        }),
         CredentialsProvider({
             name: "Credentials",
             credentials: {
@@ -33,11 +38,13 @@ export const authOptions: NextAuthOptions = {
                     throw new Error("No user found with this email");
                 }
 
-                const passwordMatch = await bcrypt.compare(credentials.password, existingUser.password);
-                if (!passwordMatch) {
-                    throw new Error("Incorrect password");
+                if(existingUser.password){
+                    const passwordMatch = await bcrypt.compare(credentials.password, existingUser.password);
+                    if (!passwordMatch) {
+                        throw new Error("Incorrect password");
+                    }
                 }
-
+                
                 return {
                     id: `${existingUser.id}`,
                     username: existingUser.username,
